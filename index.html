@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Expense Reimbursement Claim Form</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f7f6; }
+        .header { background-color: #007b7f; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .section { background: white; padding: 15px; border-radius: 5px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .expense-line { border-left: 4px solid #007b7f; padding-left: 15px; margin-bottom: 15px; background: #fafafa; padding: 10px; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #007b7f; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
+        .add-btn { background-color: #e0e0e0; color: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Community Expense Reimbursement Claim Form</h2>
+        <p>Families for Christ Melbourne</p>
+    </div>
+
+    <form id="reimbursementForm">
+        <!-- Global Claim Details -->
+        <div class="section">
+            <label>Full Name (Payee Name) *</label>
+            <input type="text" id="payeeName" required>
+
+            <label>MWG or Pastoral Grouping *</label>
+            <select id="mwgGroup" required>
+                <option value="MANNY & JOAN DELA PAZ">MANNY & JOAN DELA PAZ</option>
+                <!-- Add other options here -->
+            </select>
+
+            <label>SERVICE GROUP & MINISTRY *</label>
+            <select id="serviceGroup" required>
+                <option value="FFC GENERAL COMMUNITY">FFC GENERAL COMMUNITY</option>
+            </select>
+
+            <label>Events *</label>
+            <input type="text" id="eventName" required>
+            
+            <label>Bank Transfer details (EFT) *</label>
+            <input type="text" id="eftDetails" required>
+
+            <label>Payee's email address *</label>
+            <input type="email" id="payeeEmail" required>
+        </div>
+
+        <!-- Dynamic Expense Lines Container -->
+        <div id="expenseLinesContainer"></div>
+
+        <button type="button" class="add-btn" onclick="addExpenseLine()">+ Add Another Expense Category</button>
+        <button type="button" onclick="submitForm()">Submit Claim</button>
+    </form>
+
+    <script>
+        let lineCount = 0;
+
+        function addExpenseLine() {
+            lineCount++;
+            const container = document.getElementById('expenseLinesContainer');
+            const lineHtml = `
+                <div class="section expense-line" id="line-${lineCount}">
+                    <h4>Expense Item ${lineCount}</h4>
+                    <label>Expense Type Category *</label>
+                    <select class="expenseCategory" required>
+                        <option value="External Coordinator Visit">External Coordinator Visit</option>
+                        <option value="Kitchen and Foods Supplies">Kitchen and Foods Supplies</option>
+                        <option value="Hall Hire">Hall Hire</option>
+                    </select>
+
+                    <label>Date of Expense *</label>
+                    <input type="date" class="expenseDate" required>
+
+                    <label>Amount ($) *</label>
+                    <input type="number" step="0.01" class="expenseAmount" required>
+
+                    <label>Upload Receipts (Attach multiple images/PDFs for this category) *</label>
+                    <input type="file" class="expenseReceipts" multiple accept=".pdf, image/*" required>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', lineHtml);
+        }
+
+        // Initialize with one blank line
+        addExpenseLine();
+
+        async function submitForm() {
+            // Build the JSON payload
+            const payload = {
+                payeeName: document.getElementById('payeeName').value,
+                mwgGroup: document.getElementById('mwgGroup').value,
+                serviceGroup: document.getElementById('serviceGroup').value,
+                event: document.getElementById('eventName').value,
+                eftDetails: document.getElementById('eftDetails').value,
+                email: document.getElementById('payeeEmail').value,
+                expenseLines: []
+            };
+
+            const lines = document.querySelectorAll('.expense-line');
+            lines.forEach(line => {
+                payload.expenseLines.push({
+                    category: line.querySelector('.expenseCategory').value,
+                    date: line.querySelector('.expenseDate').value,
+                    amount: parseFloat(line.querySelector('.expenseAmount').value),
+                    // Note: In a production app, you would read the files using FileReader 
+                    // and convert them to Base64 strings here before sending.
+                    receiptCount: line.querySelector('.expenseReceipts').files.length
+                });
+            });
+
+            console.log("Payload ready for Power Automate:", payload);
+            alert("Form submitted! Check console for JSON payload.");
+            
+            /* 
+            // Power Automate HTTP POST request example:
+            fetch("https://defaulta2ab34e6b7c748fb9bc4208a0f824c.4d.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/04/workflows/6541fc1b77154550845797e8199c5a01/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1hIOCbfUfiMPhigh-OeLhYYMBBRAPFWmjftOefBcSDE", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            */
+        }
+    </script>
+</body>
+</html>
