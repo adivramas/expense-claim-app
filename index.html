@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Expense Reimbursement Claim Form</title>
+    <title>FFC Community Expense Payment and Reinbursment Requisition Form</title>
+    
+    <script>
+        // Prompt for PIN immediately when the site loads
+        const enteredPin = prompt("Please enter the FFC Community PIN to access this form:");
+        // CHANGE "2026" TO YOUR DESIRED COMMUNITY PIN
+        if (enteredPin !== "2026") {
+            alert("Incorrect PIN. Access Denied.");
+            window.location.href = "https://www.google.com"; // Redirects them away
+        }
+    </script>
+
     <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
         .header { background-color: #007c7c; color: white; padding: 20px; text-align: left; }
-        .header h1 { margin: 0; font-size: 24px; }
+        .header h1 { margin: 0; font-size: 22px; line-height: 1.4; }
         .header p { margin: 5px 0 0 0; font-size: 14px; }
         .container { max-width: 800px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         .form-group { margin-bottom: 15px; }
@@ -18,12 +29,13 @@
         .expense-section h3 { margin-top: 0; font-size: 16px; }
         .btn { padding: 10px 15px; background-color: #007c7c; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
         .btn-secondary { background-color: #555; margin-bottom: 20px; }
+        .hidden-input { display: none; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Community Expense Reimbursement Claim Form</h1>
+        <h1>FFC Community EXPENSE Payment and Reinbursement Claims Requisition</h1>
         <p>Families for Christ Melbourne</p>
     </div>
 
@@ -32,32 +44,89 @@
             <!-- General Info -->
             <div class="form-group">
                 <label>Full Name (Payee Name) *</label>
-                <input type="text" id="payeeName" required>
+                <select id="payeeNameSelect" required onchange="handlePayeeChange()">
+                    <option value="">Select Member...</option>
+                    <option value="Karen Pangilinan">Karen Pangilinan</option>
+                    <option value="Aris Pangilinan">Aris Pangilinan</option>
+                    <option value="Janette Ocampo">Janette Ocampo</option>
+                    <option value="Barwon Heads Resort">Barwon Heads Resort</option>
+                    <option value="Ma Nelita Lacorte Marvida">Ma Nelita Lacorte Marvida</option>
+                    <option value="Maria Naila Tagala">Maria Naila Tagala</option>
+                    <option value="Ariel Marvida">Ariel Marvida</option>
+                    <option value="Joy Kiram">Joy Kiram</option>
+                    <option value="Elisa Ballesteros">Elisa Ballesteros</option>
+                    <option value="Maria Joy Quinal">Maria Joy Quinal</option>
+                    <option value="Ariel MIRANDILLA MARVIDA">Ariel MIRANDILLA MARVIDA</option>
+                    <option value="Joan Dela Paz">Joan Dela Paz</option>
+                    <option value="Alissandra Dela Paz">Alissandra Dela Paz</option>
+                    <option value="Janet Ocampo">Janet Ocampo</option>
+                    <option value="Rolly Rosales">Rolly Rosales</option>
+                    <option value="Ryan Cangco">Ryan Cangco</option>
+                    <option value="Evelyn Cangco">Evelyn Cangco</option>
+                    <option value="Maria Theresa May Jornales">Maria Theresa May Jornales</option>
+                    <option value="JayAr Villanueva">JayAr Villanueva</option>
+                    <option value="Freddie Basco">Freddie Basco</option>
+                    <option value="Erwin Yago">Erwin Yago</option>
+                    <option value="Coverdale Community Centre">Coverdale Community Centre</option>
+                    <option value="Rosewall Community Centre">Rosewall Community Centre</option>
+                    <option value="Gods Light Community Inc">Gods Light Community Inc</option>
+                    <option value="Wyndham City Council">Wyndham City Council</option>
+                    <option value="Wyndham City Council Tarneit">Wyndham City Council Tarneit</option>
+                    <option value="Asian Region Association of Community Foundation">Asian Region Association of Community Foundation</option>
+                    <option value="WCC">WCC</option>
+                    <option value="Rosewall Neigbourhood Centre">Rosewall Neigbourhood Centre</option>
+                    <option value="Unenrolled">Unenrolled (Enter Name)</option>
+                </select>
+                <input type="text" id="payeeNameText" class="hidden-input" placeholder="Enter full name">
             </div>
+
             <div class="form-group">
                 <label>MWG or Pastoral Grouping *</label>
                 <select id="mwgGroup" required>
                     <option value="">Select...</option>
+                    <option value="ARIS & KAREN PANGILINAN">ARIS & KAREN PANGILINAN</option>
                     <option value="MANNY & JOAN DELA PAZ">MANNY & JOAN DELA PAZ</option>
+                    <option value="HENRY & NAILA TAGALA">HENRY & NAILA TAGALA</option>
+                    <option value="ARIEL & ANGIE MARVIDA">ARIEL & ANGIE MARVIDA</option>
+                    <option value="Business">Business</option>
                     <option value="OTHER">OTHER</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label>SERVICE GROUP & MINISTRY *</label>
                 <select id="serviceGroup" required>
                     <option value="">Select...</option>
                     <option value="FFC GENERAL COMMUNITY">FFC GENERAL COMMUNITY</option>
+                    <option value="YOUNG PROFESSIONALS OUTREACH">YOUNG PROFESSIONALS OUTREACH</option>
+                    <option value="HIGH SCHOOL PROGRAM">HIGH SCHOOL PROGRAM</option>
+                    <option value="KIDS MINISTRY">KIDS MINISTRY</option>
                     <option value="OTHER">OTHER</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label>Events *</label>
-                <input type="text" id="events" required>
+                <select id="eventsSelect" required onchange="toggleInput('eventsSelect', 'eventsText', 'Other')">
+                    <option value="">Select...</option>
+                    <option value="Recollection">Recollection</option>
+                    <option value="Christmas Party and Anniversary">Christmas Party and Anniversary</option>
+                    <option value="Men's Event">Men's Event</option>
+                    <option value="Women's Event">Women's Event</option>
+                    <option value="Retreats">Retreats</option>
+                    <option value="Family Day">Family Day</option>
+                    <option value="External Coordinator Visit">External Coordinator Visit</option>
+                    <option value="Evangelisation (CLP)">Evangelisation (CLP)</option>
+                    <option value="Other">Other (Please specify)</option>
+                </select>
+                <input type="text" id="eventsText" class="hidden-input" placeholder="Specify Event">
             </div>
+
             <div class="form-group">
                 <label>Bank Transfer details (EFT) *</label>
                 <input type="text" id="eftDetails" required>
             </div>
+
             <div class="form-group">
                 <label>Payee's email address *</label>
                 <input type="email" id="email" required>
@@ -69,12 +138,28 @@
                     <h3>Expense Item 1</h3>
                     <div class="form-group">
                         <label>Expense Type Category *</label>
-                        <select class="expCategory" required>
+                        <select class="expCategory" required onchange="toggleDynamicInput(this)">
                             <option value="">Select...</option>
-                            <option value="External Coordinator Visit">External Coordinator Visit</option>
-                            <option value="Kitchen Supplies">Kitchen Supplies</option>
+                            <option value="Airfare">Airfare</option>
+                            <option value="Child minding">Child minding</option>
+                            <option value="Decorations">Decorations</option>
+                            <option value="External Coordinator Stipend">External Coordinator Stipend</option>
+                            <option value="External Coordinator Hosting">External Coordinator Hosting</option>
+                            <option value="Equipment (Music, IT)">Equipment (Music, IT)</option>
+                            <option value="Gifts and Donations">Gifts and Donations</option>
+                            <option value="Giveaways">Giveaways</option>
                             <option value="Hall Hire">Hall Hire</option>
+                            <option value="Insurance">Insurance</option>
+                            <option value="Kitchen and Foods Supplies">Kitchen and Foods Supplies</option>
+                            <option value="Meals, Dine Out (Official Business Meeting)">Meals, Dine Out (Official Business Meeting)</option>
+                            <option value="Office and Stationeries Supplies">Office and Stationeries Supplies</option>
+                            <option value="Registration Fee">Registration Fee</option>
+                            <option value="Stipend Resource Person">Stipend Resource Person</option>
+                            <option value="Subscription fee">Subscription fee</option>
+                            <option value="Tithe Sword of the Spirit">Tithe Sword of the Spirit</option>
+                            <option value="Other">Other</option>
                         </select>
+                        <input type="text" class="expCategoryText hidden-input" placeholder="Specify Category">
                     </div>
                     <div class="form-group">
                         <label>Date of Expense *</label>
@@ -97,6 +182,108 @@
     </div>
 
     <script>
+        // Master dictionary matching payee names to their group, email, and bank details
+        const payeeDetails = {
+            "Karen Pangilinan": { group: "ARIS & KAREN PANGILINAN", email: "karenruthpangilinan@yahoo.com" },
+            "Aris Pangilinan": { group: "ARIS & KAREN PANGILINAN", email: "arismp93@yahoo.com" },
+            "Janette Ocampo": { group: "MANNY & JOAN DELA PAZ", email: "ocampogelicano@yahoo.com" },
+            "Barwon Heads Resort": { group: "HENRY & NAILA TAGALA", email: "dorothy.quinal@gmail.com" },
+            "Ma Nelita Lacorte Marvida": { group: "HENRY & NAILA TAGALA", email: "nelita.lacorte@gmail.com" },
+            "Maria Naila Tagala": { group: "HENRY & NAILA TAGALA", email: "ethanbalong090272@yahoo.com" },
+            "Ariel Marvida": { group: "HENRY & NAILA TAGALA", email: "ariel.marvida@gmail.com" },
+            "Joy Kiram": { group: "HENRY & NAILA TAGALA", email: "vjskiram@gmail.com" },
+            "Elisa Ballesteros": { group: "MANNY & JOAN DELA PAZ", email: "leobaleno88_lara@yahoo.com.au" },
+            "Maria Joy Quinal": { group: "HENRY & NAILA TAGALA", email: "joydj.quinal@gmail.com" },
+            "Ariel MIRANDILLA MARVIDA": { group: "HENRY & NAILA TAGALA", email: "ariel.marvida@gmail.com" },
+            "Joan Dela Paz": { group: "MANNY & JOAN DELA PAZ", email: "Joan.DelaPaz@anz.com" },
+            "Alissandra Dela Paz": { group: "ARIEL & ANGIE MARVIDA", email: "alyssecruz@outlook.com" },
+            "Janet Ocampo": { group: "MANNY & JOAN DELA PAZ", email: "ocampogelicano@yahoo0.com" },
+            "Rolly Rosales": { group: "ARIS & KAREN PANGILINAN", email: "rollyrosales@ffcmelbourne.org" },
+            "Ryan Cangco": { group: "MANNY & JOAN DELA PAZ", email: "rcangco@gmail.com" },
+            "Evelyn Cangco": { group: "MANNY & JOAN DELA PAZ", email: "ecangco@gmail.com" },
+            "Maria Theresa May Jornales": { group: "ARIS & KAREN PANGILINAN", email: "mtmjornales@icloud.com" },
+            "JayAr Villanueva": { group: "ARIS & KAREN PANGILINAN", email: "jaymervill2004@gmail.com" },
+            "Freddie Basco": { group: "HENRY & NAILA TAGALA", email: "freddiebasco23@gmail.com" },
+            "Erwin Yago": { group: "ARIS & KAREN PANGILINAN", email: "erwin_yago@yahoo.com" },
+            "Coverdale Community Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-103912945" },
+            "Rosewall Community Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633000-167932631" },
+            "Gods Light Community Inc": { group: "Business", email: "glcommunity.syd@gmail.com", bank: "062293-10351899" },
+            "Wyndham City Council": { group: "Business", email: "yurevc@yahoo.com", bank: "BPAY Biller Code : 429597 Reference : 100133347" },
+            "Wyndham City Council Tarneit": { group: "Business", email: "yurevc@yahoo.com", bank: "BPAY Biller Code : 429597 Reference : 100129311" },
+            "Asian Region Association of Community Foundation": { group: "Business", email: "tedquinal@gmail.com", bank: "Acct No: 9961000022" },
+            "WCC": { group: "Business", email: "tedquinal@gmail.com", bank: "BPAY Biller Code: 429597 Ref Number: 100137959" },
+            "Rosewall Neigbourhood Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-167932631" }
+        };
+
+        // Handles Payee selection changes to auto-fill group, email, and bank details
+        function handlePayeeChange() {
+            const select = document.getElementById('payeeNameSelect');
+            const text = document.getElementById('payeeNameText');
+            const groupSelect = document.getElementById('mwgGroup');
+            const emailInput = document.getElementById('email');
+            const bankInput = document.getElementById('eftDetails');
+
+            const payee = select.value;
+
+            // 1. Toggle the "Unenrolled" text box
+            if (payee === 'Unenrolled') {
+                text.style.display = 'block';
+                text.required = true;
+            } else {
+                text.style.display = 'none';
+                text.required = false;
+            }
+
+            // 2. Auto-fill the details if the payee is in our master dictionary
+            const details = payeeDetails[payee];
+            if (details) {
+                groupSelect.value = details.group || "";
+                emailInput.value = details.email || "";
+
+                if (details.bank) {
+                    bankInput.value = details.bank;
+                    bankInput.readOnly = true; 
+                    bankInput.style.backgroundColor = "#e9ecef"; 
+                } else {
+                    bankInput.value = ""; 
+                    bankInput.readOnly = false; 
+                    bankInput.style.backgroundColor = ""; 
+                }
+            } else {
+                // Clear fields for Unenrolled members so they can type their own details
+                groupSelect.value = "";
+                emailInput.value = "";
+                bankInput.value = ""; 
+                bankInput.readOnly = false; 
+                bankInput.style.backgroundColor = ""; 
+            }
+        }
+
+        // Toggle text boxes when Event is "Other"
+        function toggleInput(selectId, textId, triggerValue) {
+            const select = document.getElementById(selectId);
+            const text = document.getElementById(textId);
+            if (select.value === triggerValue) {
+                text.style.display = 'block';
+                text.required = true;
+            } else {
+                text.style.display = 'none';
+                text.required = false;
+            }
+        }
+
+        // Toggle text box for dynamic Expense Rows when "Other" is selected
+        function toggleDynamicInput(selectElement) {
+            const textElement = selectElement.nextElementSibling;
+            if (selectElement.value === 'Other') {
+                textElement.style.display = 'block';
+                textElement.required = true;
+            } else {
+                textElement.style.display = 'none';
+                textElement.required = false;
+            }
+        }
+
         let expenseCount = 1;
 
         // Function to dynamically add new expense rows
@@ -108,12 +295,28 @@
                     <h3>Expense Item ${expenseCount}</h3>
                     <div class="form-group">
                         <label>Expense Type Category *</label>
-                        <select class="expCategory" required>
+                        <select class="expCategory" required onchange="toggleDynamicInput(this)">
                             <option value="">Select...</option>
-                            <option value="External Coordinator Visit">External Coordinator Visit</option>
-                            <option value="Kitchen Supplies">Kitchen Supplies</option>
+                            <option value="Airfare">Airfare</option>
+                            <option value="Child minding">Child minding</option>
+                            <option value="Decorations">Decorations</option>
+                            <option value="External Coordinator Stipend">External Coordinator Stipend</option>
+                            <option value="External Coordinator Hosting">External Coordinator Hosting</option>
+                            <option value="Equipment (Music, IT)">Equipment (Music, IT)</option>
+                            <option value="Gifts and Donations">Gifts and Donations</option>
+                            <option value="Giveaways">Giveaways</option>
                             <option value="Hall Hire">Hall Hire</option>
+                            <option value="Insurance">Insurance</option>
+                            <option value="Kitchen and Foods Supplies">Kitchen and Foods Supplies</option>
+                            <option value="Meals, Dine Out (Official Business Meeting)">Meals, Dine Out (Official Business Meeting)</option>
+                            <option value="Office and Stationeries Supplies">Office and Stationeries Supplies</option>
+                            <option value="Registration Fee">Registration Fee</option>
+                            <option value="Stipend Resource Person">Stipend Resource Person</option>
+                            <option value="Subscription fee">Subscription fee</option>
+                            <option value="Tithe Sword of the Spirit">Tithe Sword of the Spirit</option>
+                            <option value="Other">Other</option>
                         </select>
+                        <input type="text" class="expCategoryText hidden-input" placeholder="Specify Category">
                     </div>
                     <div class="form-group">
                         <label>Date of Expense *</label>
@@ -131,7 +334,7 @@
             container.insertAdjacentHTML('beforeend', html);
         }
 
-        // Helper function to convert files to Base64 so they can be sent in JSON
+        // Helper function to convert files to Base64
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -150,6 +353,13 @@
             submitBtn.disabled = true;
 
             try {
+                // Determine final values for Payee and Events (handles "Other" / "Unenrolled")
+                const payeeSelect = document.getElementById('payeeNameSelect').value;
+                const finalPayee = (payeeSelect === 'Unenrolled') ? document.getElementById('payeeNameText').value : payeeSelect;
+
+                const eventsSelect = document.getElementById('eventsSelect').value;
+                const finalEvents = (eventsSelect === 'Other') ? document.getElementById('eventsText').value : eventsSelect;
+
                 // 1. Gather all individual expense lines and read files
                 const expenseElements = document.querySelectorAll('.expense-item');
                 let expenseLinesArray = [];
@@ -164,8 +374,12 @@
                         attachments.push(fileData);
                     }
 
+                    // Determine category (handles "Other")
+                    const catSelect = el.querySelector('.expCategory').value;
+                    const finalCategory = (catSelect === 'Other') ? el.querySelector('.expCategoryText').value : catSelect;
+
                     expenseLinesArray.push({
-                        category: el.querySelector('.expCategory').value,
+                        category: finalCategory,
                         date: el.querySelector('.expDate').value,
                         amount: parseFloat(el.querySelector('.expAmount').value),
                         files: attachments
@@ -174,17 +388,17 @@
 
                 // 2. Build the final JSON payload
                 const payload = {
-                    payeeName: document.getElementById('payeeName').value,
+                    payeeName: finalPayee,
                     mwgGroup: document.getElementById('mwgGroup').value,
                     serviceGroup: document.getElementById('serviceGroup').value,
-                    events: document.getElementById('events').value,
+                    events: finalEvents,
                     eftDetails: document.getElementById('eftDetails').value,
                     email: document.getElementById('email').value,
                     expenseLines: expenseLinesArray
                 };
 
-                // 3. Send the data to Power Automate
-                const response = await fetch("https://defaulta2ab34e6b7c748fb9bc4208a0f824c.4d.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/04/workflows/6541fc1b77154550845797e8199c5a01/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1hIOCbfUfiMPhigh-OeLhYYMBBRAPFWmjftOefBcSDE", {
+                // 3. Send the data to Power Automate (PASTE YOUR ACTUAL TRIGGER URL BELOW)
+                const response = await fetch("PASTE_YOUR_POWER_AUTOMATE_HTTP_URL_HERE", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
@@ -194,6 +408,10 @@
                 if (response.ok) {
                     alert("Claim Submitted Successfully! Power Automate received it.");
                     document.getElementById('claimForm').reset();
+                    // Reset dropdown auto-fill styles and hidden text boxes
+                    document.getElementById('eftDetails').readOnly = false;
+                    document.getElementById('eftDetails').style.backgroundColor = "";
+                    document.querySelectorAll('.hidden-input').forEach(el => el.style.display = 'none');
                 } else {
                     alert("Power Automate rejected the data. HTTP Error: " + response.status);
                 }
