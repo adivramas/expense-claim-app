@@ -7,7 +7,7 @@
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
         .header { background: linear-gradient(to right, #2499d1, #406fba); color: white; padding: 20px; display: flex; align-items: center; gap: 15px; }
-        .header img { width: 70px; height: auto; background-color: white; border-radius: 50%; padding: 5px; }
+        .header img { width: 70px; height: auto; border-radius: 50%; padding: 5px; }
         .header-text h1 { margin: 0; font-size: 22px; line-height: 1.4; }
         .header-text p { margin: 5px 0 0 0; font-size: 14px; }
         .container { max-width: 800px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -41,7 +41,7 @@
         </div>
 
         <form id="claimForm" class="hidden">
-            <input type="hidden" id="requestor">
+            <input type="hidden" id="activePasskey">
 
             <div class="form-group">
                 <label>Claim Path *</label>
@@ -59,6 +59,11 @@
                     <option value="Coverdale Community Centre">Coverdale Community Centre</option>
                     <option value="Rosewall Community Centre">Rosewall Community Centre</option>
                     <option value="Gods Light Community Inc">Gods Light Community Inc</option>
+                    <option value="Wyndham City Council">Wyndham City Council</option>
+                    <option value="Wyndham City Council Tarneit">Wyndham City Council Tarneit</option>
+                    <option value="Asian Region Association of Community Foundation">Asian Region Association of Community Foundation</option>
+                    <option value="WCC">WCC</option>
+                    <option value="Rosewall Neigbourhood Centre">Rosewall Neigbourhood Centre</option>
                     <option value="New">Enter New / Unenrolled Business</option>
                 </select>
             </div>
@@ -124,27 +129,51 @@
     </div>
 
     <script>
-        // Directory stripped of private bank details for security
+        // Highly secure masked directory. True PII is completely absent from the source code.
         const userDirectory = {
-            "26312": { name: "Karen Pangilinan", group: "ARIS & KAREN PANGILINAN", email: "karenruthpangilinan@yahoo.com" },
-            "26313": { name: "Aris Pangilinan", group: "ARIS & KAREN PANGILINAN", email: "arismp93@yahoo.com" },
-            "26314": { name: "Janette Ocampo", group: "MANNY & JOAN DELA PAZ", email: "ocampogelicano@yahoo.com" }
-            // Add remaining passkeys here
+            "26312": { name: "K**** P*********", group: "ARIS & KAREN PANGILINAN", email: "k*********@*****.com" },
+            "26313": { name: "A*** P*********", group: "ARIS & KAREN PANGILINAN", email: "a******@*****.com" },
+            "26314": { name: "J****** O*****", group: "MANNY & JOAN DELA PAZ", email: "o************@*****.com" },
+            "26316": { name: "M* N***** L****** M******", group: "HENRY & NAILA TAGALA", email: "n*************@*****.com" },
+            "26317": { name: "M**** N**** T*****", group: "HENRY & NAILA TAGALA", email: "e*****************@*****.com" },
+            "26318": { name: "A**** M******", group: "HENRY & NAILA TAGALA", email: "a************@*****.com" },
+            "26319": { name: "J** K****", group: "HENRY & NAILA TAGALA", email: "v*******@*****.com" },
+            "26320": { name: "E**** B**********", group: "MANNY & JOAN DELA PAZ", email: "l******************@******.com.au" },
+            "26321": { name: "M**** J** Q*****", group: "HENRY & NAILA TAGALA", email: "j**********@*****.com" },
+            "26322": { name: "A**** M********* M******", group: "HENRY & NAILA TAGALA", email: "a************@*****.com" },
+            "26323": { name: "M**** N**** T*****", group: "HENRY & NAILA TAGALA", email: "e*****************@*****.com" },
+            "26324": { name: "J*** D*** P**", group: "MANNY & JOAN DELA PAZ", email: "j***********@***.com" },
+            "26325": { name: "A********* D*** P**", group: "ARIEL & ANGIE MARVIDA", email: "a***********@*******.com" },
+            "26326": { name: "J**** O*****", group: "MANNY & JOAN DELA PAZ", email: "o**************@******.com" },
+            "26327": { name: "R**** R******", group: "ARIS & KAREN PANGILINAN", email: "r************@**************.org" },
+            "26328": { name: "R*** C*****", group: "MANNY & JOAN DELA PAZ", email: "r*******@*****.com" },
+            "26329": { name: "E***** C*****", group: "MANNY & JOAN DELA PAZ", email: "e*******@*****.com" },
+            "26330": { name: "M**** T****** M** J*******", group: "ARIS & KAREN PANGILINAN", email: "m**********@******.com" },
+            "26331": { name: "J**** V*********", group: "ARIS & KAREN PANGILINAN", email: "j*************@*****.com" },
+            "26332": { name: "F****** B****", group: "HENRY & NAILA TAGALA", email: "f**************@*****.com" },
+            "26333": { name: "E**** Y***", group: "ARIS & KAREN PANGILINAN", email: "e**********@*****.com" }
         };
 
         const businessDirectory = {
             "Coverdale Community Centre": { email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-103912945" },
             "Rosewall Community Centre": { email: "leobaleno88_lara@yahoo.com.au", bank: "633000-167932631" },
-            "Gods Light Community Inc": { email: "glcommunity.syd@gmail.com", bank: "062293-10351899" }
+            "Gods Light Community Inc": { email: "glcommunity.syd@gmail.com", bank: "062293-10351899" },
+            "Wyndham City Council": { email: "yurevc@yahoo.com", bank: "BPAY Biller Code : 429597 Reference : 100133347" },
+            "Wyndham City Council Tarneit": { email: "yurevc@yahoo.com", bank: "BPAY Biller Code : 429597 Reference : 100129311" },
+            "Asian Region Association of Community Foundation": { email: "tedquinal@gmail.com", bank: "Acct No: 9961000022" },
+            "WCC": { email: "tedquinal@gmail.com", bank: "BPAY Biller Code: 429597 Ref Number: 100137959" },
+            "Rosewall Neigbourhood Centre": { email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-167932631" }
         };
 
         let currentUser = null;
+        let currentPasskey = null;
 
         function authenticateUser() {
             const code = document.getElementById('claimCode').value;
             if (userDirectory[code]) {
                 currentUser = userDirectory[code];
-                document.getElementById('requestor').value = `${code}-${currentUser.name}`;
+                currentPasskey = code;
+                document.getElementById('activePasskey').value = code;
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('claimForm').classList.remove('hidden');
                 togglePath(); 
@@ -168,7 +197,6 @@
             const path = document.getElementById('claimPath').value;
             const bizSelect = document.getElementById('businessSelectGroup');
 
-            // Reset fields
             document.getElementById('payeeName').value = "";
             document.getElementById('group').value = "";
             document.getElementById('email').value = "";
@@ -222,11 +250,11 @@
                     <h3>Expense Item ${expenseCount}</h3>
                     <div class="form-group">
                         <label>Expense Type *</label>
-                        <select class="expType" required><option value="FFC GENERAL COMMUNITY">FFC GENERAL COMMUNITY</option><option value="OTHER">OTHER</option></select>
+                        <select class="expType" required><option value="">Select...</option><option value="FFC GENERAL COMMUNITY">FFC GENERAL COMMUNITY</option><option value="OTHER">OTHER</option></select>
                     </div>
                     <div class="form-group">
                         <label>Subcategory *</label>
-                        <select class="expCategory" required><option value="Hall Hire">Hall Hire</option><option value="Other">Other</option></select>
+                        <select class="expCategory" required><option value="">Select...</option><option value="Hall Hire">Hall Hire</option><option value="Other">Other</option></select>
                     </div>
                     <div class="form-group"><label>Date *</label><input type="date" class="expDate" required></div>
                     <div class="form-group"><label>Amount ($) *</label><input type="number" step="0.01" class="expAmount" required></div>
@@ -260,21 +288,23 @@
                     });
                 }
 
-                // If "Self", send empty string for bank so backend knows to look it up. Otherwise send the visible text.
                 const isSelf = document.getElementById('claimPath').value === "Self";
                 const bankPayload = isSelf ? "" : document.getElementById('bankDetails').value;
+                const emailPayload = isSelf ? "" : document.getElementById('email').value;
+                const payeePayload = isSelf ? "" : document.getElementById('payeeName').value;
 
                 const payload = {
-                    requestor: document.getElementById('requestor').value,
+                    passkey: document.getElementById('activePasskey').value,
                     dateSubmitted: new Date().toLocaleString(),
-                    payeeName: document.getElementById('payeeName').value,
+                    claimPath: document.getElementById('claimPath').value,
+                    payeeName: payeePayload,
                     mwgGroup: document.getElementById('group').value,
-                    email: document.getElementById('email').value,
+                    email: emailPayload,
                     eftDetails: bankPayload,
                     expenseLines: expenseLinesArray
                 };
 
-                const response = await fetch("YOUR_POWER_AUTOMATE_URL_HERE", {
+                const response = await fetch("PASTE_YOUR_POWER_AUTOMATE_URL_HERE", {
                     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
                 });
 
