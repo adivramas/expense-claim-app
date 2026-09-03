@@ -1,149 +1,265 @@
-<script>
-    // Completely Masked Directory - No Real PII exists on the frontend
-    const userDirectory = {
-        "26312": { name: "K**** P*********", group: "ARIS & KAREN PANGILINAN", email: "k*********@*****.com" },
-        "26313": { name: "A*** P*********", group: "ARIS & KAREN PANGILINAN", email: "a***@*****.com" },
-        "26314": { name: "J****** O*****", group: "MANNY & JOAN DELA PAZ", email: "o********@*****.com" },
-        "26315": { name: "M* N***** L****** M******", group: "HENRY & NAILA TAGALA", email: "n******@*****.com" },
-        "26316": { name: "M**** N**** T*****", group: "HENRY & NAILA TAGALA", email: "t******@*****.com" },
-        "26317": { name: "A**** M******", group: "ARIEL & ANGIE MARVIDA", email: "a****@*****.com" },
-        "26318": { name: "J** K****", group: "HENRY & NAILA TAGALA", email: "k****@*****.com" },
-        "26319": { name: "E**** B**********", group: "MANNY & JOAN DELA PAZ", email: "b**********@*****.com" },
-        "26320": { name: "M**** J** Q*****", group: "HENRY & NAILA TAGALA", email: "q*****@*****.com" },
-        "26321": { name: "A**** M********* M******", group: "ARIEL & ANGIE MARVIDA", email: "m******@*****.com" },
-        "26322": { name: "J*** D*** P**", group: "MANNY & JOAN DELA PAZ", email: "d*******@*****.com" },
-        "26323": { name: "A********* D*** P**", group: "MANNY & JOAN DELA PAZ", email: "a*********@*****.com" },
-        "26324": { name: "J**** O*****", group: "MANNY & JOAN DELA PAZ", email: "o*****@*****.com" },
-        "26325": { name: "R**** R******", group: "ARIS & KAREN PANGILINAN", email: "r******@*****.com" },
-        "26326": { name: "R*** C*****", group: "MANNY & JOAN DELA PAZ", email: "c*****@*****.com" },
-        "26327": { name: "E***** C*****", group: "MANNY & JOAN DELA PAZ", email: "e*****@*****.com" },
-        "26328": { name: "M**** T****** M** J*******", group: "ARIS & KAREN PANGILINAN", email: "j*******@*****.com" },
-        "26329": { name: "J**** V*********", group: "ARIS & KAREN PANGILINAN", email: "v*********@*****.com" },
-        "26330": { name: "F****** B****", group: "HENRY & NAILA TAGALA", email: "b****@*****.com" },
-        "26331": { name: "E**** Y***", group: "ARIS & KAREN PANGILINAN", email: "y***@*****.com" }
-    };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFC Community Expense Claims</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .hidden { display: none !important; }
+        .readonly-field { background-color: #e9ecef; color: #555; }
+        .expense-item { border-left: 4px solid #007c7c; padding: 15px; background: #f9f9f9; margin-bottom: 15px; }
+        button { padding: 10px 15px; background-color: #007c7c; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
+    </style>
+</head>
+<body>
 
-    const businessDirectory = {
-        "Coverdale Community Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-103912945" },
-        "Rosewall Community Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633000-167932631" },
-        "Gods Light Community Inc": { group: "Business", email: "glcommunity.syd@gmail.com", bank: "062293-10351899" },
-        "Wyndham City Council": { group: "Business", email: "yurevc@yahoo.com", bank: "BPAY: 429597 Ref: 100133347" },
-        "Wyndham City Council Tarneit": { group: "Business", email: "yurevc@yahoo.com", bank: "BPAY: 429597 Ref: 100129311" },
-        "Asian Region Association of Community Foundation": { group: "Business", email: "tedquinal@gmail.com", bank: "Acct: 9961000022" },
-        "WCC": { group: "Business", email: "tedquinal@gmail.com", bank: "BPAY: 429597 Ref: 100137959" },
-        "Rosewall Neigbourhood Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-167932631" }
-    };
+    <div class="container">
+        <h2>FFC EXPENSE CLAIMS</h2>
+        
+        <!-- Secure Passkey Gateway -->
+        <div class="form-group" id="loginSection">
+            <label>Enter your 5-Digit Claim Code (Passkey) *</label>
+            <input type="password" id="claimCode" placeholder="Enter code to unlock">
+            <button type="button" onclick="authenticateUser()">Unlock Form</button>
+        </div>
 
-    let currentUser = null;
+        <div id="claimDetails" class="hidden">
+            <form id="claimForm">
+                <input type="hidden" id="requestor">
 
-    function authenticateUser() {
-        const code = document.getElementById('claimCode').value;
-        if (userDirectory[code]) {
-            currentUser = userDirectory[code];
-            document.getElementById('claimDetails').classList.remove('hidden');
-            
-            // Sends the passkey as the requestor ID for backend lookup
-            document.getElementById('requestor').value = code; 
-            fillSelf();
-        } else {
-            document.getElementById('claimDetails').classList.add('hidden');
-        }
-    }
+                <div class="form-group">
+                    <label>Claim Path *</label>
+                    <select id="payeeType" onchange="toggleBusiness()">
+                        <option value="Self">1. Claim for Self</option>
+                        <option value="Business">2. Claim for Business</option>
+                    </select>
+                </div>
 
-    function toggleBusiness() {
-        const type = document.getElementById('payeeType').value;
-        if (type === 'Business') {
-            document.getElementById('businessSelect').classList.remove('hidden');
-            document.getElementById('payeeName').value = "";
-            document.getElementById('group').value = "";
-            document.getElementById('email').value = "";
-            document.getElementById('bank').value = "";
-        } else {
-            document.getElementById('businessSelect').classList.add('hidden');
-            fillSelf();
-        }
-    }
+                <div id="businessSelect" class="form-group hidden">
+                    <label>Select Business *</label>
+                    <select id="businessList" onchange="fillBusiness()">
+                        <option value="">Select...</option>
+                        <option value="Coverdale Community Centre">Coverdale Community Centre</option>
+                        <option value="Rosewall Community Centre">Rosewall Community Centre</option>
+                        <option value="Gods Light Community Inc">Gods Light Community Inc</option>
+                        <option value="Wyndham City Council">Wyndham City Council</option>
+                        <option value="Wyndham City Council Tarneit">Wyndham City Council Tarneit</option>
+                        <option value="Asian Region Association of Community Foundation">Asian Region Association of Community Foundation</option>
+                        <option value="WCC">WCC</option>
+                        <option value="Rosewall Neigbourhood Centre">Rosewall Neigbourhood Centre</option>
+                    </select>
+                </div>
 
-    function fillSelf() {
-        document.getElementById('payeeName').value = currentUser.name;
-        document.getElementById('group').value = currentUser.group;
-        document.getElementById('email').value = currentUser.email;
-        document.getElementById('bank').value = "🔒 Registered on File";
-    }
+                <!-- Dynamic Identity Fields -->
+                <div class="form-group"><label>Payee Name</label><input type="text" id="payeeName" class="readonly-field" readonly required></div>
+                <div class="form-group"><label>Group or Business</label><input type="text" id="group" class="readonly-field" readonly required></div>
+                <div class="form-group"><label>Payee Email</label><input type="email" id="email" class="readonly-field" readonly required></div>
+                <div class="form-group"><label>Bank Details</label><input type="text" id="bank" class="readonly-field" readonly required></div>
 
-    function fillBusiness() {
-        const biz = document.getElementById('businessList').value;
-        if (businessDirectory[biz]) {
-            document.getElementById('payeeName').value = biz;
-            document.getElementById('group').value = businessDirectory[biz].group;
-            document.getElementById('email').value = businessDirectory[biz].email;
-            document.getElementById('bank').value = businessDirectory[biz].bank;
-        }
-    }
+                <!-- Expense Items Container -->
+                <div id="expenseContainer">
+                    <div class="expense-item">
+                        <b>Expense Item 1</b>
+                        <div class="form-group">
+                            <label>Expense Type *</label>
+                            <select class="expType" required>
+                                <option value="">Select...</option>
+                                <option value="FFC GENERAL COMMUNITY">FFC GENERAL COMMUNITY</option>
+                                <option value="YOUNG PROFESSIONALS OUTREACH">YOUNG PROFESSIONALS OUTREACH</option>
+                                <option value="HIGH SCHOOL PROGRAM">HIGH SCHOOL PROGRAM</option>
+                                <option value="KIDS MINISTRY">KIDS MINISTRY</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Subcategory *</label>
+                            <select class="expCategory" required>
+                                <option value="">Select...</option>
+                                <option value="Airfare">Airfare</option>
+								<option value="Child minding">Child minding</option>
+								<option value="Decorations">Decorations</option>
+								<option value="External Coordinator Stipend">External Coordinator Stipend</option>
+								<option value="External Coordinator Hosting">External Coordinator Hosting</option>
+								<option value="Equipment (Music, IT)">Equipment (Music, IT)</option>
+								<option value="Gifts and Donations">Gifts and Donations</option>
+								<option value="Giveaways">Giveaways</option>
+								<option value="Hall Hire">Hall Hire</option>
+								<option value="Insurance">Insurance</option>
+								<option value="Kitchen and Foods Supplies">Kitchen and Foods Supplies</option>
+								<option value="Meals, Dine Out (Official Business Meeting)">Meals, Dine Out (Official Business Meeting)</option>
+								<option value="Office and Stationeries Supplies">Office and Stationeries Supplies</option>
+								<option value="Registration Fee">Registration Fee</option>
+								<option value="Stipend Resource Person">Stipend Resource Person</option>
+								<option value="Subscription fee">Subscription fee</option>
+								<option value="Tithe Sword of the Spirit">Tithe Sword of the Spirit</option>
+								<option value="Other">Other</option>							
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Date *</label><input type="date" class="expDate" required></div>
+                        <div class="form-group"><label>Amount ($) *</label><input type="number" step="0.01" class="expAmount" required></div>
+                        <div class="form-group"><label>Upload Receipts *</label><input type="file" class="expFiles" multiple required></div>
+                    </div>
+                </div>
 
-    let expenseCount = 1;
-    function addExpense() {
-        expenseCount++;
-        const container = document.getElementById('expenseContainer');
-        const newExpense = document.querySelector('.expense-item').cloneNode(true);
-        newExpense.querySelector('b').textContent = `Expense Item ${expenseCount}`;
-        newExpense.querySelectorAll('input').forEach(input => input.value = '');
-        container.appendChild(newExpense);
-    }
+                <button type="button" style="background-color: #555;" onclick="addExpense()">+ Add Another Expense Item</button>
+                <button type="submit">Submit Claim</button>
+            </form>
+        </div>
+    </div>
 
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve({ name: file.name, contentBytes: reader.result.split(',')[1] });
-        reader.onerror = error => reject(error);
-    });
+    <script>
+        // Completely Masked Directory - No Real PII exists on the frontend
+        const userDirectory = {
+            "26312": { name: "K**** P*********", group: "ARIS & KAREN PANGILINAN", email: "k*********@*****.com" },
+            "26313": { name: "A*** P*********", group: "ARIS & KAREN PANGILINAN", email: "a***@*****.com" },
+            "26314": { name: "J****** O*****", group: "MANNY & JOAN DELA PAZ", email: "o********@*****.com" },
+            "26315": { name: "M* N***** L****** M******", group: "HENRY & NAILA TAGALA", email: "n******@*****.com" },
+            "26316": { name: "M**** N**** T*****", group: "HENRY & NAILA TAGALA", email: "t******@*****.com" },
+            "26317": { name: "A**** M******", group: "ARIEL & ANGIE MARVIDA", email: "a****@*****.com" },
+            "26318": { name: "J** K****", group: "HENRY & NAILA TAGALA", email: "k****@*****.com" },
+            "26319": { name: "E**** B**********", group: "MANNY & JOAN DELA PAZ", email: "b**********@*****.com" },
+            "26320": { name: "M**** J** Q*****", group: "HENRY & NAILA TAGALA", email: "q*****@*****.com" },
+            "26321": { name: "A**** M********* M******", group: "ARIEL & ANGIE MARVIDA", email: "m******@*****.com" },
+            "26322": { name: "J*** D*** P**", group: "MANNY & JOAN DELA PAZ", email: "d*******@*****.com" },
+            "26323": { name: "A********* D*** P**", group: "MANNY & JOAN DELA PAZ", email: "a*********@*****.com" },
+            "26324": { name: "J**** O*****", group: "MANNY & JOAN DELA PAZ", email: "o*****@*****.com" },
+            "26325": { name: "R**** R******", group: "ARIS & KAREN PANGILINAN", email: "r******@*****.com" },
+            "26326": { name: "R*** C*****", group: "MANNY & JOAN DELA PAZ", email: "c*****@*****.com" },
+            "26327": { name: "E***** C*****", group: "MANNY & JOAN DELA PAZ", email: "e*****@*****.com" },
+            "26328": { name: "M**** T****** M** J*******", group: "ARIS & KAREN PANGILINAN", email: "j*******@*****.com" },
+            "26329": { name: "J**** V*********", group: "ARIS & KAREN PANGILINAN", email: "v*********@*****.com" },
+            "26330": { name: "F****** B****", group: "HENRY & NAILA TAGALA", email: "b****@*****.com" },
+            "26331": { name: "E**** Y***", group: "ARIS & KAREN PANGILINAN", email: "y***@*****.com" }
+        };
 
-    document.getElementById('claimForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const submitBtn = document.querySelector('button[type="submit"]');
-        submitBtn.disabled = true; submitBtn.textContent = "Sending...";
+        const businessDirectory = {
+            "Coverdale Community Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-103912945" },
+            "Rosewall Community Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633000-167932631" },
+            "Gods Light Community Inc": { group: "Business", email: "glcommunity.syd@gmail.com", bank: "062293-10351899" },
+            "Wyndham City Council": { group: "Business", email: "yurevc@yahoo.com", bank: "BPAY: 429597 Ref: 100133347" },
+            "Wyndham City Council Tarneit": { group: "Business", email: "yurevc@yahoo.com", bank: "BPAY: 429597 Ref: 100129311" },
+            "Asian Region Association of Community Foundation": { group: "Business", email: "tedquinal@gmail.com", bank: "Acct: 9961000022" },
+            "WCC": { group: "Business", email: "tedquinal@gmail.com", bank: "BPAY: 429597 Ref: 100137959" },
+            "Rosewall Neigbourhood Centre": { group: "Business", email: "leobaleno88_lara@yahoo.com.au", bank: "633-000-167932631" }
+        };
 
-        try {
-            let expenseLinesArray = [];
-            for (let el of document.querySelectorAll('.expense-item')) {
-                let attachments = [];
-                for (let file of el.querySelector('.expFiles').files) {
-                    attachments.push(await toBase64(file));
-                }
-                expenseLinesArray.push({
-                    expType: el.querySelector('.expType').value,
-                    expCategory: el.querySelector('.expCategory').value,
-                    date: el.querySelector('.expDate').value,
-                    amount: parseFloat(el.querySelector('.expAmount').value),
-                    files: attachments
-                });
-            }
+        let currentUser = null;
 
-            const payload = {
-                requestor: document.getElementById('requestor').value, // This is now purely the 5-digit passkey
-                dateSubmitted: new Date().toLocaleString(),
-                payeeName: document.getElementById('payeeName').value,
-                mwgGroup: document.getElementById('group').value,
-                email: document.getElementById('email').value,
-                eftDetails: document.getElementById('bank').value,
-                expenseLines: expenseLinesArray
-            };
-
-            const response = await fetch("https://defaulta2ab34e6b7c748fb9bc4208a0f824c.4d.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/04/workflows/6541fc1b77154550845797e8199c5a01/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1hIOCbfUfiMPhigh-OeLhYYMBBRAPFWmjftOefBcSDE", {
-                method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                alert("Claim Submitted Successfully!");
-                location.reload();
+        function authenticateUser() {
+            const code = document.getElementById('claimCode').value;
+            if (userDirectory[code]) {
+                currentUser = userDirectory[code];
+                document.getElementById('claimDetails').classList.remove('hidden');
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('requestor').value = code; 
+                fillSelf();
             } else {
-                alert("Power Automate rejected the data. Error: " + response.status);
+                alert("Invalid Passkey. Please try again.");
+                document.getElementById('claimDetails').classList.add('hidden');
             }
-        } catch (error) {
-            alert("Submission failed. Error: " + error.message);
-        } finally {
-            submitBtn.textContent = "Submit Claim"; submitBtn.disabled = false;
         }
-    });
-</script>
+
+        function toggleBusiness() {
+            const type = document.getElementById('payeeType').value;
+            if (type === 'Business') {
+                document.getElementById('businessSelect').classList.remove('hidden');
+                document.getElementById('payeeName').value = "";
+                document.getElementById('group').value = "";
+                document.getElementById('email').value = "";
+                document.getElementById('bank').value = "";
+            } else {
+                document.getElementById('businessSelect').classList.add('hidden');
+                fillSelf();
+            }
+        }
+
+        function fillSelf() {
+            document.getElementById('payeeName').value = currentUser.name;
+            document.getElementById('group').value = currentUser.group;
+            document.getElementById('email').value = currentUser.email;
+            document.getElementById('bank').value = "🔒 Registered on File";
+        }
+
+        function fillBusiness() {
+            const biz = document.getElementById('businessList').value;
+            if (businessDirectory[biz]) {
+                document.getElementById('payeeName').value = biz;
+                document.getElementById('group').value = businessDirectory[biz].group;
+                document.getElementById('email').value = businessDirectory[biz].email;
+                document.getElementById('bank').value = businessDirectory[biz].bank;
+            }
+        }
+
+        let expenseCount = 1;
+        function addExpense() {
+            expenseCount++;
+            const container = document.getElementById('expenseContainer');
+            const newExpense = document.querySelector('.expense-item').cloneNode(true);
+            newExpense.querySelector('b').textContent = `Expense Item ${expenseCount}`;
+            newExpense.querySelectorAll('input').forEach(input => input.value = '');
+            container.appendChild(newExpense);
+        }
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve({ name: file.name, contentBytes: reader.result.split(',')[1] });
+            reader.onerror = error => reject(error);
+        });
+
+        document.getElementById('claimForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.disabled = true; submitBtn.textContent = "Sending...";
+
+            try {
+                let expenseLinesArray = [];
+                for (let el of document.querySelectorAll('.expense-item')) {
+                    let attachments = [];
+                    for (let file of el.querySelector('.expFiles').files) {
+                        attachments.push(await toBase64(file));
+                    }
+                    expenseLinesArray.push({
+                        expType: el.querySelector('.expType').value,
+                        expCategory: el.querySelector('.expCategory').value,
+                        date: el.querySelector('.expDate').value,
+                        amount: parseFloat(el.querySelector('.expAmount').value),
+                        files: attachments
+                    });
+                }
+
+                const payload = {
+                    requestor: document.getElementById('requestor').value, 
+                    dateSubmitted: new Date().toLocaleString(),
+                    payeeName: document.getElementById('payeeName').value,
+                    mwgGroup: document.getElementById('group').value,
+                    email: document.getElementById('email').value,
+                    eftDetails: document.getElementById('bank').value,
+                    expenseLines: expenseLinesArray
+                };
+
+                const response = await fetch("https://defaulta2ab34e6b7c748fb9bc4208a0f824c.4d.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/04/workflows/6541fc1b77154550845797e8199c5a01/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=1hIOCbfUfiMPhigh-OeLhYYMBBRAPFWmjftOefBcSDE", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert("Claim Submitted Successfully!");
+                    location.reload();
+                } else {
+                    alert("Power Automate rejected the data. Error: " + response.status);
+                }
+            } catch (error) {
+                alert("Submission failed. Error: " + error.message);
+            } finally {
+                submitBtn.textContent = "Submit Claim"; submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
