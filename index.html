@@ -105,6 +105,22 @@
                                 <option value="Other">Other</option>                           
                             </select>
                         </div>
+						<div class="form-group">
+						    <label>Events *</label>
+						    <select id="eventsSelect" required>
+						        <option value="">Select...</option>
+						        <option value="Community Gathering">Community Gathering</option>
+						        <option value="Recollection">Recollection</option>
+						        <option value="Christmas Party and Anniversary">Christmas Party and Anniversary</option>
+						        <option value="Men's Event">Men's Event</option>
+						        <option value="Women's Event">Women's Event</option>
+						        <option value="Retreats">Retreats</option>
+						        <option value="Family Day">Family Day</option>
+						        <option value="External Coordinator Visit">External Coordinator Visit</option>
+						        <option value="Evangelisation CLP">Evangelisation CLP</option>
+						        <option value="Other">Other</option>
+						    </select>
+						</div>
                         <div class="form-group"><label>Date *</label><input type="date" class="expDate" required></div>
                         <div class="form-group"><label>Amount ($) *</label><input type="number" step="0.01" class="expAmount" required></div>
                         <div class="form-group"><label>Upload Receipts *</label><input type="file" class="expFiles" multiple required></div>
@@ -247,6 +263,8 @@
 					email: document.getElementById('email').value,
 					eftDetails: document.getElementById('bank').value,
 					expenseLines: expenseLinesArray
+				    events: document.getElementById('eventsSelect').value, // <-- Add this new line
+    			
 				};
 	
 
