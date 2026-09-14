@@ -123,8 +123,8 @@
 						    </select>
 						</div>
                         <div class="form-group"><label>Date *</label><input type="date" class="expDate" required></div>
-                        <div class="form-group"><label>Amount ($) *</label><input type="number" step="0.01" class="expAmount" required></div>
-                        <div class="form-group"><label>Upload Receipts *</label><input type="file" class="expFiles" multiple required></div>
+                        <div class="form-group"><label>Amount ($) *</label><input type="text" inputmode="decimal" class="expAmount" placeholder="e.g. 5.25" required></div>
+					    <div class="form-group"><label>Upload Receipts *</label><input type="file" class="expFiles" multiple required></div>
                     </div>
                 </div>
 
@@ -238,7 +238,7 @@
             reader.onload = () => resolve({ name: file.name, contentBytes: reader.result.split(',')[1] });
             reader.onerror = error => reject(error);
         });
-
+ 		
         document.getElementById('claimForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const submitBtn = document.querySelector('button[type="submit"]');
@@ -255,7 +255,7 @@
                         expType: el.querySelector('.expType').value,
                         expCategory: el.querySelector('.expCategory').value,
                         date: el.querySelector('.expDate').value,
-                        amount: parseFloat(el.querySelector('.expAmount').value),
+						amount: parseFloat(el.querySelector('.expAmount').value.replace(/[^0-9.]/g, '')),
                         files: attachments
                     });
                 }
