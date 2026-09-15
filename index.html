@@ -280,10 +280,10 @@
                 });
 
                 if (response.ok) {
-                    alert("Claim Submitted Successfully!");
+                    alert("Claim Submitted Successfully! Please check your inbox to confirm the request details");
                     location.reload();
                 } else {
-                    alert("Power Automate rejected the data. Error: " + response.status);
+                    alert("There is an error processing your request. Pls contact FFC Admin. Error: " + response.status);
                 }
             } catch (error) {
                 alert("Submission failed. Error: " + error.message);
